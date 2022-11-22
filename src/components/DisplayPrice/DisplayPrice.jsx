@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function DisplayPrice({ displayAddItem, economy, date, note, addToList, updateInList }) {
 
   //Hooks
   //States
-  const [buyPriceEdit, setBuyPriceEdit] = useState(displayAddItem ? 0 : economy.buyPrice)
-  const [quantityEdit, setQuantityEdit] = useState(displayAddItem ? 1 : economy.quantity)
-  const [goalPriceEdit, setGoalPriceEdit] = useState(displayAddItem ? 0 : economy.goalPrice)
-  const [dateEdit, setDateEdit] = useState(new Date())
-  const [noteEdit, setNoteEdit] = useState(displayAddItem ? "" : note)
+  const [buyPriceEdit, setBuyPriceEdit] = useState(economy.buyPrice ?? 0)
+  const [quantityEdit, setQuantityEdit] = useState(economy.quantity ?? 1)
+  const [goalPriceEdit, setGoalPriceEdit] = useState(economy.goalPrice ?? 0)
+  const [dateEdit, setDateEdit] = useState(date ?? new Date())
+  const [noteEdit, setNoteEdit] = useState(note ?? "")
 
   const [readOnly, setReadOnly] = useState(true)
 
@@ -37,34 +37,22 @@ function DisplayPrice({ displayAddItem, economy, date, note, addToList, updateIn
     e.preventDefault()
     setReadOnly(!readOnly)
   }
+  const classname = economy.totalPrice ? "display" : "displayEditable"
+  return (
+    <div className={classname}>
+      <input className={classname} onChange={handleBuyPriceEdit} type="text" placeholder="Buy Price" readOnly={readOnly} value={buyPriceEdit} />
+      <input className={classname} onChange={handleQuantityEdit} type="text" placeholder="Quantity" readOnly={readOnly} value={quantityEdit} />
+      <input className={classname} onChange={handleGoalPriceEdit} type="text" placeholder="Price Goal" readOnly={readOnly} value={goalPriceEdit} />
+      {economy.totalPrice && <div className="display">TP: {economy.totalPrice}</div>}
+      {economy.nowPrice && <div className="display">NP: {economy.nowPrice}</div>}
+      {economy.toGoalPiece && <div className="display">2Goal/Piece: {economy.toGoalPiece}</div>}
+      {economy.toGoalTotal && <div className="display">2Goal/Total: {economy.toGoalTotal}</div>}
+      {date && <div className="display">Date of invest: {date}</div>}
+      <input className={classname} onChange={handleNoteEdit} type="text" placeholder="Note" readOnly={readOnly} value={noteEdit} />
+      <button className="button" onClick={handleReadOnly}>{economy.totalPrice ? "Edit" : "Add Item"}</button>
+    </div>
+  )
 
-  if (displayAddItem) {
-    return (
-      <div className="addItemDisplayDiv">
-        <input className="addItemDisplayEditable" onChange={handleBuyPriceEdit} type="text" placeholder="Buy Price" />
-        <input className="addItemDisplayEditable" onChange={handleQuantityEdit} type="text" placeholder="Quantity" />
-        <input className="addItemDisplayEditable" onChange={handleGoalPriceEdit} type="text" placeholder="Price Goal" />
-        <input className="addItemDisplayEditableDate" onChange={handleDateEdit} type="date" placeholder="Date" />
-        <input className="addItemDisplayEditable" onChange={handleNoteEdit} type="text" placeholder="Note" />
-        <button className="addItemButton" onClick={handleAddItem}>Add Item</button>
-      </div>
-    )
-  } else {
-    return (
-      <div className="displayDiv">
-        <input className="displayEditable" onChange={handleBuyPriceEdit} type="text" placeholder={economy.buyPrice} readOnly={readOnly} />
-        <input className="displayEditable" onChange={handleQuantityEdit} type="text" placeholder={economy.quantity} readOnly={readOnly} />
-        <input className="displayEditable" onChange={handleGoalPriceEdit} type="text" placeholder={economy.goalPrice} readOnly={readOnly} />
-        <div className="display">TP: {economy.totalPrice}</div>
-        <div className="display">NP: {economy.nowPrice}</div>
-        <div className="display">2Goal/Piece: {economy.toGoalPiece}</div>
-        <div className="display">2Goal/Total: {economy.toGoalTotal}</div>
-        <div className="display">Date of invest: {date}</div>
-        <input className="displayEditable" onChange={handleNoteEdit} type="text" placeholder={note} readOnly={readOnly} />
-        <button className="button" onClick={handleReadOnly}>Edit</button>
-      </div>
-    )
-  }
 }
 
 export default DisplayPrice
