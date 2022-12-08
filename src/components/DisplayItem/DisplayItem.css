@@ -1,3 +1,35 @@
-.displayItem {
+.addItemDisplayWrapper {
     border-style: solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addItemDisplayImage{
+    width: 26.6vh;
+    height: 20vh;
+}
+
+.addItemDisplay {
+    font-weight: bold;
+}
+
+
+
+.itemDisplayWrapper {
+    border-style: solid;
+    display: flex;
+    flex-direction: row;
+    min-width: 50vh;
+}
+
+.itemDisplayImage {
+    width: 6.65vh;
+    height: 5vh;
+    margin: 2vh;
+}
+
+.itemDisplay {
+    font-weight: bold;
+    margin-top: 3.5vh;
 }

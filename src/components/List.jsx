@@ -1,7 +1,7 @@
 //components
-import ListEntity from './ListEntity';
+import ListEntity from './ListEntity/ListEntity';
 
-function List({ list, editListEntity, deleteListEntity, sellListEntity }) {
+function List({ list }) {
 
     //JSX
     return (

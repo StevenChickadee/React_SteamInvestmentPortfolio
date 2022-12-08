@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import "./DisplayPrice.css"
 
-function DisplayPrice({ displayAddItem, economy, date, note, addToList, updateInList }) {
+import React, { useState } from 'react'
 
+function DisplayPrice({ displayAddItem, economy, date, note, addToList, editInList }) {
   //Hooks
   //States
-  const [buyPriceEdit, setBuyPriceEdit] = useState(economy.buyPrice ?? 0)
-  const [quantityEdit, setQuantityEdit] = useState(economy.quantity ?? 1)
-  const [goalPriceEdit, setGoalPriceEdit] = useState(economy.goalPrice ?? 0)
-  const [dateEdit, setDateEdit] = useState(date ?? new Date())
-  const [noteEdit, setNoteEdit] = useState(note ?? "")
+  const [buyPriceEdit, setBuyPriceEdit] = useState(displayAddItem ? 0 : economy.buyPrice)
+  const [quantityEdit, setQuantityEdit] = useState(displayAddItem ? 1 : economy.quantity)
+  const [goalPriceEdit, setGoalPriceEdit] = useState(displayAddItem ? 0 : economy.goalPrice)
+  const [dateEdit, setDateEdit] = useState(displayAddItem ? new Date() : date)
+  const [noteEdit, setNoteEdit] = useState(displayAddItem ? "" : note)
 
   const [readOnly, setReadOnly] = useState(true)
 
@@ -30,28 +31,75 @@ function DisplayPrice({ displayAddItem, economy, date, note, addToList, updateIn
   }
   function handleAddItem(e) {
     e.preventDefault()
-    if (buyPriceEdit >= 0 && quantityEdit > 0 && goalPriceEdit >= 0)
+    if (checkInputs(buyPriceEdit, quantityEdit, goalPriceEdit)) {
       addToList(buyPriceEdit, quantityEdit, goalPriceEdit, dateEdit, noteEdit)
+    }
   }
   function handleReadOnly(e) {
     e.preventDefault()
+    if (!readOnly) {
+      if (checkInputs(buyPriceEdit, quantityEdit, goalPriceEdit)) {
+        editInList(buyPriceEdit, quantityEdit, goalPriceEdit, noteEdit)
+      }
+    }
     setReadOnly(!readOnly)
   }
-  const classname = economy.totalPrice ? "display" : "displayEditable"
-  return (
-    <div className={classname}>
-      <input className={classname} onChange={handleBuyPriceEdit} type="text" placeholder="Buy Price" readOnly={readOnly} value={buyPriceEdit} />
-      <input className={classname} onChange={handleQuantityEdit} type="text" placeholder="Quantity" readOnly={readOnly} value={quantityEdit} />
-      <input className={classname} onChange={handleGoalPriceEdit} type="text" placeholder="Price Goal" readOnly={readOnly} value={goalPriceEdit} />
-      {economy.totalPrice && <div className="display">TP: {economy.totalPrice}</div>}
-      {economy.nowPrice && <div className="display">NP: {economy.nowPrice}</div>}
-      {economy.toGoalPiece && <div className="display">2Goal/Piece: {economy.toGoalPiece}</div>}
-      {economy.toGoalTotal && <div className="display">2Goal/Total: {economy.toGoalTotal}</div>}
-      {date && <div className="display">Date of invest: {date}</div>}
-      <input className={classname} onChange={handleNoteEdit} type="text" placeholder="Note" readOnly={readOnly} value={noteEdit} />
-      <button className="button" onClick={handleReadOnly}>{economy.totalPrice ? "Edit" : "Add Item"}</button>
-    </div>
-  )
+
+  //Help functions
+  function checkInputs(buyPrice, quantity, goalPrice) {
+    if (isNumber(buyPrice) && isNumber(quantity) && isNumber(goalPrice) && buyPrice >= 0 && quantity > 0 && goalPrice >= 0) {
+      return true
+    }
+    return false
+  }
+  function isNumber(input) {
+    if (input.trim() === "") {
+      return false
+    }
+    return !isNaN(input)
+  }
+
+  const display = displayAddItem ? "addPriceDisplay" : "priceDisplay"
+  const displayEditable = displayAddItem ? "addPriceDisplayEditable" : "priceDisplayEditable"
+
+  if (displayAddItem) {
+    return (
+      <div className="addPriceDisplayWrapper">
+        <input className={displayEditable} onChange={handleBuyPriceEdit} type="text" placeholder="Buy Price" />
+        <input className={displayEditable} onChange={handleQuantityEdit} type="text" placeholder="Quantity" />
+        <input className={displayEditable} onChange={handleGoalPriceEdit} type="text" placeholder="Price Goal" />
+        <input className={displayEditable} onChange={handleDateEdit} type="date" />
+        <input className={displayEditable} onChange={handleNoteEdit} type="text" placeholder="Note" />
+        <button className="priceDisplaybutton" onClick={handleAddItem}>Add Item</button>
+      </div>
+    )
+  } else {
+    return (
+      <div className="priceDisplayWrapper">
+        <input className={displayEditable} onChange={handleBuyPriceEdit} type="text" value={buyPriceEdit} readOnly={readOnly} />
+        <input className={displayEditable} onChange={handleQuantityEdit} type="text" value={quantityEdit} readOnly={readOnly} />
+        <input className={displayEditable} onChange={handleGoalPriceEdit} type="text" value={goalPriceEdit} readOnly={readOnly} />
+        <div className={display}>TotalInvested: {economy.totalPrice.toFixed(2)} $</div>
+        {economy.quantity === 1 ? (
+          <div>
+            <div className={display}>NowPrice: {economy.nowPrice.toFixed(2)} $</div>
+            <div className={display}>2Goal: {economy.toGoalTotal.toFixed(2)} $</div>
+          </div>
+        ) : null}
+        {economy.quantity > 1 ? (
+          <div>
+            <div className={display}>NowPrice/Piece: {economy.nowPrice.toFixed(2)} $</div>
+            <div className={display}>NowPrice/Total: {economy.totalNowPrice.toFixed(2)} $</div>
+            <div className={display}>2Goal/Piece: {economy.toGoalPiece.toFixed(2)} $</div>
+            <div className={display}>2Goal/Total: {economy.toGoalTotal.toFixed(2)} $</div>
+          </div>
+        ) : null}
+        <div className={display}>Date of purchase: {date}</div>
+        <input className={displayEditable} onChange={handleNoteEdit} type="text" value={noteEdit} readOnly={readOnly} />
+        <button className="priceDisplaybutton" onClick={handleReadOnly}>Edit</button>
+      </div>
+    )
+  }
 
 }
 

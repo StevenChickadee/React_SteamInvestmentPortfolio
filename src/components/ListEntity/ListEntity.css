@@ -1,0 +1,4 @@
+.listEntity {
+    display: flex;
+    flex-direction: row;
+}

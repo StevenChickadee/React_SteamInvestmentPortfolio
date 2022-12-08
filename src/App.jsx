@@ -6,10 +6,10 @@ import { Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 //Components & Pages
-import NavBar from './components/NavBar'
-import Home from './pages/Home'
-import Portfolio from './pages/Portfolio'
-import AddItem from './pages/AddItem'
+import NavBar from './components/NavBar/NavBar'
+import Home from './pages/Home/Home'
+import Portfolio from './pages/Portfolio/Portfolio'
+import AddItem from './pages/AddItem/AddItem'
 import ItemDetail from './pages/ItemDetail'
 import PageNotFound from './pages/PageNotFound'
 
