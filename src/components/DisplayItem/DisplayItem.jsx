@@ -3,7 +3,7 @@ import "./DisplayItem.css"
 import React, { useState, useEffect } from 'react'
 
 
-function DisplayItem({ displayAddItem, item }) {
+function DisplayItem({ displayBig, item }) {
 
   const [nowPrice, setNowPrice] = useState(0)
 
@@ -22,18 +22,18 @@ function DisplayItem({ displayAddItem, item }) {
     }
   }, [])
 
-  //TO-DO border color
-  if (displayAddItem) {
+
+  if (displayBig) {
     return (
-      <div className="addItemDisplayWrapper" border-color={item.border_color}>
-        <div className="addItemDisplay">{item.market_name}</div>
-        <img className="addItemDisplayImage" src={item.image} alt="item" />
-        <div className="addItemDisplayPrice">{nowPrice} $</div>
+      <div className="bigItemDisplayWrapper" style={{"borderColor": checkBorderColor(item.border_color)}}>
+        <div className="bigItemDisplay">{item.market_name}</div>
+        <img className="bigItemDisplayImage" src={item.image} alt="item" />
+        <div className="bigItemDisplayPrice">{nowPrice} $</div>
       </div>
     )
   } else {
     return (
-      <div className="itemDisplayWrapper" border-color={item.border_color}>
+      <div className="itemDisplayWrapper" style={{"borderColor": checkBorderColor(item.border_color)}}>
         <img className="itemDisplayImage" src={item.image} alt="item" />
         <div className="itemDisplay">{item.market_name}</div>
       </div>
@@ -42,3 +42,11 @@ function DisplayItem({ displayAddItem, item }) {
 }
 
 export default DisplayItem
+
+
+function checkBorderColor(border_color){
+  if(border_color.charAt(0) !== "#"){
+    return "#" + border_color
+  }
+  return border_color
+}

@@ -10,7 +10,7 @@ import NavBar from './components/NavBar/NavBar'
 import Home from './pages/Home/Home'
 import Portfolio from './pages/Portfolio/Portfolio'
 import AddItem from './pages/AddItem/AddItem'
-import ItemDetail from './pages/ItemDetail'
+import ItemDetail from './pages/ItemDetail/ItemDetail'
 import PageNotFound from './pages/PageNotFound'
 
 const queryClient = new QueryClient()
@@ -29,10 +29,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/portfolio">
               <Route path="" element={<Portfolio />} />
-
+              <Route path=":itemID" element={<ItemDetail />} />
               <Route path="addItem" element={<AddItem />} />
             </Route>
-            
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
 
@@ -43,5 +43,3 @@ function App() {
 
 export default App;
 
-//<Route path=":id" element={<ItemDetail />} />
-//<Route path="*" element={<PageNotFound />} />

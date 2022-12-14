@@ -53,7 +53,7 @@ function DisplayPrice({ displayAddItem, economy, date, note, addToList, editInLi
     return false
   }
   function isNumber(input) {
-    if (input.trim() === "") {
+    if (typeof input === "string" && input.trim() === "") {
       return false
     }
     return !isNaN(input)

@@ -1,16 +1,16 @@
-.addItemDisplayWrapper {
+.bigItemDisplayWrapper {
     border-style: solid;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.addItemDisplayImage{
+.bigItemDisplayImage{
     width: 26.6vh;
     height: 20vh;
 }
 
-.addItemDisplay {
+.bigItemDisplay {
     font-weight: bold;
 }
 

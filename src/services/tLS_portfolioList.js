@@ -13,7 +13,7 @@ export function addToPortfolioList(item, buyPrice, quantity, goalPrice, /*TO-DO 
     let portfolioList = getPortfolioList()
 
     //Format date input
-    const dateForm = formatDate(new Date(date))
+    const dateForm = formatDate( new Date(date))
 
     //Parse inputs into float
     const buyPricePar = parseFloat(buyPrice)
@@ -104,9 +104,9 @@ export function updatePortfolioList(id, item) {
                 const lastHistoryElem = investment.history[investment.history.length - 1]
 
                 //If last entry in history array is older then 24 HOURS, add new entry
-                /*if (isOlderThan24Hours(lastHistoryElem.date)) {
+                if (isOlderThan24Hours(lastHistoryElem.date)) {
                     investment.history.push({ date: formatDate(new Date()), price: nowPricePar })
-                }*/
+                }
             }
         })
     }
@@ -147,23 +147,18 @@ export function setPortfolioList(portfolioList) {
     localStorage.setItem(LOCAL_STORAGE_KEY_PORTFOLIOLIST, JSON.stringify(portfolioList))
 }
 
-
-
 //TO-DO
 //Formats date into DD/MM/YYYY standard
 function formatDate(date) {
     return date.toUTCString()
 }
 
-//TO-DO
 function isOlderThan24Hours(date) {
     //Date consts
-    const oneDay = 60 * 60 * 24 * 1000
-    const twentyFourHoursAgo = Date.now() - oneDay
+    const twentyFourHoursAgo = new Date()
+    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1)
 
-    console.log("date " + date.getTime())
-    console.log("24hrs " + twentyFourHoursAgo)
-    console.log(twentyFourHoursAgo > date)
+    return (twentyFourHoursAgo > new Date(date))
 }
 
 function getNewestPriceData(item) {
@@ -175,7 +170,6 @@ function getNewestPriceData(item) {
         return parseFloat(item.prices.safe_ts.last_30d)
     } else if (parseFloat(item.prices.safe_ts.last_90d) > 0) {
         return parseFloat(item.prices.safe_ts.last_90d)
-    } else {
-        return parseFloat(item.prices.safe)
     }
+        return parseFloat(item.prices.safe)
 }

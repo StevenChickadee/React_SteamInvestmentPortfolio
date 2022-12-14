@@ -62,7 +62,7 @@ function AddItem() {
 
                 {item ? (
                     <div>
-                        <DisplayItem displayAddItem={true} item={item} />
+                        <DisplayItem displayBig={true} item={item} />
                         <DisplayPrice displayAddItem={true} addToList={addToList} />
                     </div>
                 ) : null}
